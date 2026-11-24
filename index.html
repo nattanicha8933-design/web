@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jibbitz Style Guide - คอลเลกชันตัวติดรองเท้าออนไลน์</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(180deg, #fff5f8 0%, #f4f9ff 100%);
+            color: #4a4453;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        header {
+            background: linear-gradient(135deg, #ffd6e0 0%, #e2d1f9 50%, #c8e7ff 100%);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            border-bottom: 3px solid #ffffff;
+            box-shadow: 0 4px 15px rgba(214, 180, 232, 0.25);
+        }
+        header h1 {
+            font-size: 2rem;
+            color: #4a3560;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8);
+        }
+        header p {
+            color: #5c4b70;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 2.2rem;
+        }
+        .filter-btn {
+            background-color: #ffffff;
+            border: 2px solid #f0d9eb;
+            color: #6b5b7b;
+            padding: 8px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+        .filter-btn:hover {
+            background-color: #ffeef4;
+            border-color: #ff9ebb;
+            transform: translateY(-2px);
+        }
+        .filter-btn.active {
+            background: linear-gradient(135deg, #ff8fab 0%, #b5838d 100%);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(255, 143, 171, 0.4);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid #f7e8f3;
+            box-shadow: 0 6px 18px rgba(180, 160, 200, 0.14);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 24px rgba(255, 143, 171, 0.25);
+            border-color: #ffb3c6;
+        }
+        .card-img {
+            height: 185px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+            transition: filter 0.3s ease;
+        }
+        .card-img:hover {
+            filter: brightness(0.96);
+        }
+        .bg-solid { background: linear-gradient(135deg, #ffccd5, #ffe5ec); color: #803349; }
+        .bg-white { background: linear-gradient(135deg, #f8f9fa, #e9ecef); color: #495057; }
+        .bg-dark { background: linear-gradient(135deg, #cdb4db, #b8c0ff); color: #3c096c; }
+        .bg-pastel { background: linear-gradient(135deg, #ffd6ff, #e7c6ff); color: #5a189a; }
+        .bg-glitter { background: linear-gradient(135deg, #bde0fe, #a2d2ff); color: #1d3557; }
+
+        .card-img::after {
+            content: "📂 แตะเพื่อดูรูปทั้งหมดในหมวดนี้";
+            position: absolute;
+            bottom: 10px;
+            background: rgba(255, 255, 255, 0.92);
+            color: #d6336c;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card-body {
+            padding: 1.2rem;
+        }
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #3d3447;
+            margin-bottom: 0.4rem;
+        }
+        .card-category {
+            display: inline-block;
+            background: #fff0f5;
+            border: 1px solid #ffccd5;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #d6336c;
+            margin-bottom: 0.6rem;
+        }
+        .card-text {
+            font-size: 0.85rem;
+            color: #6c6375;
+        }
+
+        /* หน้าต่างแกลเลอรี (Modal) แสดงรูปย่อยในแต่ละหมวด */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(50, 35, 65, 0.65);
+            backdrop-filter: blur(4px);
+            overflow-y: auto;
+            padding: 1.5rem 1rem;
+        }
+        .modal-content {
+            background: #ffffff;
+            max-width: 850px;
+            margin: 1rem auto;
+            border-radius: 20px;
+            padding: 1.8rem;
+            border: 3px solid #f7e8f3;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+            animation: popIn 0.25s ease;
+        }
+        @keyframes popIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #fff0f5;
+            padding-bottom: 1rem;
+            margin-bottom: 1.2rem;
+        }
+        .modal-header h2 {
+            color: #4a3560;
+            font-size: 1.35rem;
+        }
+        .close-btn {
+            background: #ffeef4;
+            color: #d6336c;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .close-btn:hover {
+            background: #ff8fab;
+            color: #ffffff;
+        }
+        .modal-hint {
+            background: #fff5f8;
+            color: #d6336c;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            text-align: center;
+        }
+        .sub-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        .sub-item {
+            background: #fffafc;
+            border: 2px solid #f3dce9;
+            border-radius: 14px;
+            overflow: hidden;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        .sub-item:hover {
+            transform: translateY(-4px);
+            border-color: #ff8fab;
+            box-shadow: 0 6px 15px rgba(255, 143, 171, 0.2);
+        }
+        .sub-img {
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #4a3560;
+            background-size: cover;
+            background-position: center;
+        }
+        .sub-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .sub-name {
+            padding: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #4a4453;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #8a7f96;
+            font-size: 0.85rem;
+            border-top: 2px solid #f7e8f3;
+            margin-top: 3rem;
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>✨ Jibbitz Style Guide ✨</h1>
+        <p>ศูนย์รวมคอลเลกชันตัวติดรองเท้าออนไลน์ กดเลือกหมวดหมู่เพื่อดูแบบทั้งหมด</p>
+    </header>
+
+    <div class="container">
+        <!-- ปุ่มกรองหมวดหมู่ -->
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="filterSelection('all', this)">ทั้งหมด</button>
+            <button class="filter-btn" onclick="filterSelection('solid', this)">สีล้วน</button>
+            <button class="filter-btn" onclick="filterSelection('white', this)">สีขาว</button>
+            <button class="filter-btn" onclick="filterSelection('dark', this)">โทนเข้ม</button>
+            <button class="filter-btn" onclick="filterSelection('pastel', this)">โทนพาสเทล</button>
+            <button class="filter-btn" onclick="filterSelection('glitter', this)">กากเพชร</button>
+        </div>
+
+        <!-- รายการหมวดหมู่หลัก -->
+        <div class="grid">
+            <div class="card" data-category="solid" onclick="openGallery('solid')">
+                <div class="card-img bg-solid">ภาพตัวติดรองเท้า สีล้วน</div>
+                <div class="card-body">
+                    <span class="card-category">สีล้วน (6 แบบ)</span>
+                    <h3 class="card-title">เซตสีล้วนพาสเทล</h3>
+                    <p class="card-text">ดีไซน์เรียบง่าย สีสันสดใส แมทช์ได้กับรองเท้าทุกคู่</p>
+                </div>
+            </div>
+
+            <div class="card" data-category="white" onclick="openGallery('white')">
+                <div class="card-img bg-white">ภาพตัวติดรองเท้า สีขาว</div>
+                <div class="card-body">
+                    <span class="card-category">สีขาว (6 แบบ)</span>
+                    <h3 class="card-title">เซตมินิมอลสีขาว</h3>
+                    <p class="card-text">ลุคสะอาดตา สไตล์เกาหลี เรียบหรูดูแพง</p>
+                </div>
+            </div>
+
+            <div class="card" data-category="dark" onclick="openGallery('dark')">
+                <div class="card-img bg-dark">ภาพตัวติดรองเท้า โทนเข้ม</div>
+                <div class="card-body">
+                    <span class="card-category">โทนเข้ม (6 แบบ)</span>
+                    <h3 class="card-title">เซตดาร์กสตรีท</h3>
+                    <p class="card-text">โทนสีเข้มดุดัน เท่ คูล เหมาะกับสายสตรีท</p>
+                </div>
+            </div>
+
+            <div class="card" data-category="pastel" onclick="openGallery('pastel')">
+                <div class="card-img bg-pastel">ภาพตัวติดรองเท้า โทนพาสเทล</div>
+                <div class="card-body">
+                    <span class="card-category">โทนพาสเทล (6 แบบ)</span>
+                    <h3 class="card-title">เซตหวานละมุนพาสเทล</h3>
+                    <p class="card-text">โทนสีหวานละมุน นุ่มนวล น่ารักสดใส</p>
+                </div>
+            </div>
+
+            <div class="card" data-category="glitter" onclick="openGallery('glitter')">
+                <div class="card-img bg-glitter">ภาพตัวติดรองเท้า กากเพชร</div>
+                <div class="card-body">
+                    <span class="card-category">กากเพชร (6 แบบ)</span>
+                    <h3 class="card-title">เซตประกายกากเพชรวิบวับ</h3>
+                    <p class="card-text">เคลือบกลิตเตอร์เล่นแสงระยิบระยับสะดุดตา</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- หน้าต่างแกลเลอรีสำหรับแสดงรูปย่อยจำนวนมาก -->
+    <div id="galleryModal" class="modal" onclick="closeGalleryOutside(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">คอลเลกชัน</h2>
+                <button class="close-btn" onclick="closeGallery()">&times;</button>
+            </div>
+            <div class="modal-hint">📸 แตะที่รูปที่ชอบเพื่อแคปหน้าจอ (Screenshot) ส่งสั่งซื้อในแชตได้เลย!</div>
+            <div id="subGrid" class="sub-grid"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Jibbitz Style Guide Project. Vocational Digital Business Technology.</p>
+    </footer>
+
+    <script>
+        // ข้อมูลรูปย่อยในแต่ละหมวดหมู่ (สามารถเพิ่มรายการหรือใส่ชื่อไฟล์รูปจริงใน img ได้เลย)
+        const galleryData = {
+            solid: {
+                title: "คอลเลกชัน 1 : เซตสีล้วนพาสเทล",
+                bgClass: "bg-solid",
+                items: [
+                    { name: "S-01 สีชมพูพีชล้วน", img: "" },
+                    { name: "S-02 สีฟ้าเบบี้บลู", img: "" },
+                    { name: "S-03 สีเหลืองเลมอน", img: "" },
+                    { name: "S-04 สีเขียวมิ้นท์", img: "" },
+                    { name: "S-05 สีม่วงไลแลค", img: "" },
+                    { name: "S-06 เซตรวมสีล้วน 6 ชิ้น", img: "" }
+                ]
+            },
+            white: {
+                title: "คอลเลกชัน 2 : เซตมินิมอลสีขาว",
+                bgClass: "bg-white",
+                items: [
+                    { name: "W-01 ดอกเดซี่ขาว", img: "" },
+                    { name: "W-02 ก้อนเมฆมินิมอล", img: "" },
+                    { name: "W-03 หัวใจสีขาวนูน", img: "" },
+                    { name: "W-04 โบว์ริบบิ้นขาว", img: "" },
+                    { name: "W-05 ไข่มุกมินิมอล", img: "" },
+                    { name: "W-06 เซตมินิมอลขาวล้วน", img: "" }
+                ]
+            },
+            dark: {
+                title: "คอลเลกชัน 3 : เซตดาร์กสตรีท",
+                bgClass: "bg-dark",
+                items: [
+                    { name: "D-01 ดาวเสาร์สีดำ", img: "" },
+                    { name: "D-02 หน้ายิ้มดาร์กสตรีท", img: "" },
+                    { name: "D-03 เปลวไฟสีดำม่วง", img: "" },
+                    { name: "D-04 ผีเสื้อโกธิค", img: "" },
+                    { name: "D-05 โซ่เงินเท่ ๆ", img: "" },
+                    { name: "D-06 เซตสตรีทโทนเข้ม", img: "" }
+                ]
+            },
+            pastel: {
+                title: "คอลเลกชัน 4 : เซตหวานละมุนพาสเทล",
+                bgClass: "bg-pastel",
+                items: [
+                    { name: "P-01 สายรุ้งพาสเทล", img: "" },
+                    { name: "P-02 น้องหมีพาสเทล", img: "" },
+                    { name: "P-03 ลูกกวาดหัวใจ", img: "" },
+                    { name: "P-04 ดอกไม้พาสเทล 5 กลีบ", img: "" },
+                    { name: "P-05 ยูนิคอร์นหวานละมุน", img: "" },
+                    { name: "P-06 เซตรวมพาสเทลน่ารัก", img: "" }
+                ]
+            },
+            glitter: {
+                title: "คอลเลกชัน 5 : เซตประกายกากเพชรวิบวับ",
+                bgClass: "bg-glitter",
+                items: [
+                    { name: "G-01 หัวใจกลิตเตอร์ชมพู", img: "" },
+                    { name: "G-02 ดาวประกายกากเพชร", img: "" },
+                    { name: "G-03 ผีเสื้อวิบวับสีฟ้า", img: "" },
+                    { name: "G-04 มงกุฎกลิตเตอร์", img: "" },
+                    { name: "G-05 หมีเจลลี่กากเพชร", img: "" },
+                    { name: "G-06 เซตวิบวับเล่นแสง", img: "" }
+                ]
+            }
+        };
+
+        // ฟังก์ชันเปิดแกลเลอรีเมื่อกดที่การ์ด
+        function openGallery(category) {
+            const data = galleryData[category];
+            document.getElementById('modalTitle').innerText = data.title;
+            const subGrid = document.getElementById('subGrid');
+            subGrid.innerHTML = '';
+
+            data.items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'sub-item';
+                card.onclick = function() {
+                    alert('📸 กรุณาแคปหน้าจอ (Screenshot) รหัสสินค้า "' + item.name + '" แล้วส่งมาที่แชตเพื่อสั่งซื้อได้เลยครับ!');
+                };
+
+                // ถ้าใส่ชื่อไฟล์รูปใน img จะแสดงรูปจริง ถ้ายังไม่ใส่จะแสดงกรอบสีพาสเทลแทน
+                const imgContent = item.img 
+                    ? `<img src="${item.img}" alt="${item.name}">` 
+                    : `<span>รูปสินค้า ${item.name}</span>`;
+
+                card.innerHTML = `
+                    <div class="sub-img ${data.bgClass}">${imgContent}</div>
+                    <div class="sub-name">${item.name}</div>
+                `;
+                subGrid.appendChild(card);
+            });
+
+            document.getElementById('galleryModal').style.display = 'block';
+        }
+
+        // ฟังก์ชันปิดแกลเลอรี
+        function closeGallery() {
+            document.getElementById('galleryModal').style.display = 'none';
+        }
+
+        function closeGalleryOutside(event) {
+            if (event.target.id === 'galleryModal') {
+                closeGallery();
+            }
+        }
+
+        // ฟังก์ชันกรองหมวดหมู่หน้าแรก
+        function filterSelection(category, clickedBtn) {
+            let cards = document.querySelectorAll('.card');
+            let buttons = document.querySelectorAll('.filter-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            clickedBtn.classList.add('active');
+
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
